@@ -1,14 +1,10 @@
-<meta charset="UTF-8">
-<style type="text/css">
-    body,html{width:100%;height:100%;background:#000;padding:0;margin:0;overflow-x:hidden;overflow-y:hidden}
-    *{margin:0;border:0;padding:0;text-decoration:none}
-    #stats{position:fixed;top:5px;left:10px;font-size:12px;color:#fdfdfd;z-index:2147483647;text-shadow:1px 1px 1px #000, 1px 1px 1px #000}
-    #dplayer{position:inherit}
-</style>
-<div id="dplayer"></div>
-<div id="stats"></div>
-<script src="https://cdn.jsdelivr.net/npm/cdnbye@latest"></script>
-<script src="https://cdn.jsdelivr.net/npm/dplayer@1.26.0"></script>
+
+
+<!doctype html>
+<html lang="en" data-cast-api-enabled="true">
+<head>
+<style> video {object-fit:fill}</style><style>html,body{margin:0;}</style>
+<style> .video-js {width: 100%; height: 100%;} #videojs {width: 100%; height: 100%;}</style>
 <script>
 function getParam ( sname )
 {
@@ -20,52 +16,286 @@ function getParam ( sname )
 var sv = getParam("sv");
 
 </script>
+  <title>Bein Sport </title>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-Frame-Options" content="deny">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="csrf-token" content="7h5tAuNlKCnFMpkaZPUJTJy5jPDuxICO26yPJkIL">
+    <link href="http://player.mangomolo.com/resources/assets/css/mangoPlayer_v2.css?v=4.4" rel="stylesheet">
+    <link href="http://player.mangomolo.com/resources/assets/css/plugins.css" rel="stylesheet">
+    <script src="http://player.mangomolo.com/public/js/jquery-2.0.0.js"></script>
+
+<body>
+<div id="player" style="width:100%;height:100%;"></div>
 
 <script>
-    var _peerId = '', _peerNum = 0, _totalP2PDownloaded = 0, _totalP2PUploaded = 0;
-    var type = 'normal';
-    if(Hls.isSupported() && Hls.WEBRTC_SUPPORT) {
-        type = 'customHls';
+
+    
+    function makeid(length) {
+        var result           = '';
+        var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        var charactersLength = characters.length;
+        for ( var i = 0; i < length; i++ ) {
+            result += characters.charAt(Math.floor(Math.random() * charactersLength));
+        }
+        return result;
     }
-    const dp = new DPlayer({
-        container: document.getElementById('dplayer'),
-        autoplay: true,
-        video: {
-            url: sv,
-            type: type,
-            customType: {
-                'customHls': function (video, player) {
-                    const hls = new Hls({
-                        debug: false,
-                        // Other hlsjsConfig options provided by hls.js
-                        p2pConfig: {
-                            logLevel: 'debug',
-                            live: false,        // set as true in live mode
-                            // Other p2pConfig options provided by CDNBye
-                        }
-                    });
-                    hls.loadSource(video.src);
-                    hls.attachMedia(video);
-                    hls.p2pEngine.on('stats', function (stats) {
-                        _totalP2PDownloaded = stats.totalP2PDownloaded;
-                        _totalP2PUploaded = stats.totalP2PUploaded;
-                        updateStats();
-                    }).on('peerId', function (peerId) {
-                        _peerId = peerId;
-                    }).on('peers', function (peers) {
-                        _peerNum = peers.length;
-                        updateStats();
-                    });
+    var sessionid = makeid(32);
+
+    function updateState() {
+        var userid = 'NzE=';
+        var channelid = 'MTE=';
+        var browserOS = navigator.userAgent.toLowerCase();
+        var domain = (!$.isEmptyObject(document.referrer.split('/')[2])) ? document.referrer.split('/')[2] : 'player.mangomolo.com';
+        var channel_user_id = "";
+
+                $.ajax({
+            type: 'POST', // Use POST with X-HTTP-Method-Override or a straight PUT if appropriate.
+            dataType: 'json',
+            url: "http://player.mangomolo.com/stats/update",
+            headers: {
+                "X-HTTP-Method-Override": "PUT",
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr('content')
+            }, // X-HTTP-Method-Override set to PUT.
+            beforeSend: function (xhr) {
+            },
+            data: {
+                userid: userid,
+                channelid: channelid,
+                browserOS: browserOS,
+                sessionid: sessionid,
+                domain: domain,
+                channel_user_id: channel_user_id
+            }
+        }).done(function (data) {
+            if (!$.isEmptyObject(data)) {
+                if (data.isLive == 0) {
+                    $("#live").remove();
+                    $("#error_msg").remove();
+                    update_status = false;
+                    localStorage.setItem('currentLive', 'off');
+                    jQuery('<div/>', {
+                        id: 'error_msg',
+                        html: '<div style="padding-top: 20%; font-family: "Courier New", Courier, monospace">This content is Not Available for Streaming, Please tune to the Channel to watch It on your TV.</div>'
+                    }).appendTo("body").css(
+                        {
+                            "width": '100%',
+                            "height": '100vh',
+                            "padding": "0",
+                            "margin": "0",
+                            "color": '#000',
+                            "text-align": "center",
+                            "background": "#000000 url('http://statres.cdn.mgmlcdn.com/analytics/img/bgd-notavailable.jpg') center center",
+                            "background-size": "cover"
+
+                        });
+                }
+
+                if (data.isLive == 1 && localStorage.getItem('currentLive') == 'off') {
+                    location.reload(true);
+                    localStorage.removeItem('currentLive');
+                }
+
+                if (data.isLive == 1) {
+                    localStorage.setItem('currentLive', 'on');
                 }
             }
+        });
+            }
+
+    function loadPlayer(id, width, height, poster) {
+
+        id = typeof id !== 'undefined' ? id : 'live' ;
+        width = typeof width !== 'undefined' ? width : '100%';
+        height = typeof height !== 'undefined' ? height : '100%';
+        poster = typeof poster !== 'undefined' ? poster : "http://statres.cdn.mgmlcdn.com/analytics/uploads/71/5d934cdb74.jpg";
+        var autoplay = "no";
+        var updateStateInterval;
+
+        var attributes = {
+            'id': id,
+            'class': 'video-js dotcom_player dotcom_liveplayer vjs-mango-skin',
+            'width': width,
+            'height': height,
+            'controls': '',
+            'poster':poster,
+            'preload':'none',
+            'webkit-playsinline': 'true',
+            'playsinline': 'true'
+        };
+
+        obj = $('<video />').attr(attributes);
+
+        if (autoplay === 'yes') {
+            // obj.attr('autoplay', '');
+            obj.attr('preload', 'auto');
+        }
+
+        $('body').append(obj);
+
+        
+        var controls = {
+            techOrder: [ 'chromecast', 'html5'/*, 'flash'*/],
+            plugins: {
+                chromecast: {},
+                airPlay: {}
+            },
+            html5: {
+                nativeTextTracks: false,
+                hlsjsConfig: {
+//                    startLevel  : 0,
+//                    maxBufferSize: 0,
+//                    maxBufferLength: 5,
+//                    liveSyncDuration: 5,
+                    autoStartLoad: true,
+                    //if set to true, the adaptive algorithm with limit levels usable in auto-quality
+//                    capLevelToPlayerSize: true,
+                    defaultAudioCodec: "mp4a.40.5,mp4a.40.2",
+                    debug: false
+                }
+            },
+            aspectRatio: "16:9",
+            fluid: false,
+            debug: false
+        };
+
+        var player = videojs("live", controls);
+        $("video").attr("poster", "");
+
+        var adURL = '';
+                var options = {
+            autoplay: autoplay,
+            ads: {
+                adTagUrl: adURL
+            }
+        };
+        var browser = {
+            IS_IOS: /iP(hone|ad|od)/i.test(navigator.userAgent),
+            IS_ANDROID: /Android/.test(navigator.userAgent),
+            IS_IE: document.documentMode || /Edge/.test(navigator.userAgent), // detect IE8 and above, and edge
+            IS_IE11: !!window.MSInputMethodContext && !!document.documentMode
+        };
+
+        var IS_MOBILE = browser.IS_IOS || browser.IS_ANDROID;
+
+        var clickEvent = IS_MOBILE ? 'touchend' : 'click';
+
+        
+        player.one('ready', function () {
+            player = this;
+
+            if (autoplay === 'yes') {
+                if(player.paused()){
+                    player.play();
+                }
+            }
+
+            player.on('pause', function () {
+                // console.log("paused");
+                clearInterval(updateStateInterval);
+            });
+
+            player.on('play', function () {
+                updateStateInterval=setInterval(updateState, 90000);
+                // console.log("resumed");
+            });
+
+            if (IS_MOBILE && autoplay === 'yes') {
+                player.muted(true);
+                $('#live').append('<div id="unmute_button" style="z-index: 9999"><i style="font-size: 12px" class="vjs-icon-volume-mute"></i> TAP TO UNMUTE </div>');
+                $('#unmute_button').animate({"left": '+=140'});
+                $("#unmute_button").click(function(){
+                    player.muted(false);
+                    player.volume(100);
+                    $(this).animate({"left": '-120'});
+                });
+            }
+
+            
+                            var source = [{
+                        src: "http://dmitwlvvll.cdn.mangomolo.com/dubaisportshd/smil:dubaisportshd.smil/playlist.m3u8?stime=20210503225543&etime=20210511025223&token=07a442089ea59095402df",
+                        type: "application/x-mpegURL"
+                    }];
+                player.src(source);
+            
+            player.hlsQualitySelector();
+
+            player.hotkeys({
+                enableVolumeScroll: false,
+                seekStep: 5,
+                enableModifiersForNumbers: false
+            });
+
+            
+//            player.on('contextmenu', function (e) {
+//                e.preventDefault();
+//            });
+
+            player.contextmenuUI({
+                content: [
+                    {
+                        href: 'https://www.mangomolo.com/',
+                        label: 'Copyright &copy; 2021 Mangomolo'
+                    }
+                ]
+            });
+
+            
+            
+            player.on("waiting", function ()
+            {
+                this.addClass("vjs-custom-waiting");
+                console.log('waiting...');
+            });
+
+            player.on("playing", function ()
+            {
+                this.removeClass("vjs-custom-waiting");
+                console.log('playing...');
+            });
+
+            
+            //this code for other channel button.
+                    });
+    }
+
+    </script>
+
+<script>
+    var update_status = true;
+</script>
+
+<script type="text/javascript">
+
+    
+    $(document).ready(function () {
+        loadPlayer();
+
+        if (update_status) {
+            updateState();
+            // setInterval(updateState, 60000);
         }
     });
-
-    function updateStats() {
-        var text = '' + (_totalP2PDownloaded/1024).toFixed(2)
-            + ' ' + (_totalP2PUploaded/1024).toFixed(2) + '' + '' + _peerNum + ' ';
-        document.getElementById('stats').innerText = text
-    }
 </script>
- <span style='position:absolute; bottom: 35px!important; left: 10px!important; max-bottom: 10px!important; max-width: 170%!important; width: 22%!important; font-size: 13px; font-weight: bold;color: #ff0;'>
-<img style= 'left: 10px!important; max-height: 50px!important; max-width: 100%!important; width: 90%!important;' src='http://1.bp.blogspot.com/-6Utq5JU_l2w/YCAo8gB0x7I/AAAAAAAALZU/YJxOQHkvIywpU4znsCgYEvIsc-U8ijY1wCK4BGAYYCw/s1600/2.png'></span>
+
+<script src="http://player.mangomolo.com/public/js/crypto-js/rollups/aes.js"></script>
+<script src="http://player.mangomolo.com/public/js/crypto-js/rollups/pbkdf2.js"></script>
+<script src="http://player.mangomolo.com/public/js/crypto-js/rollups/sha256.js"></script>
+<script src="http://player.mangomolo.com/resources/assets/js/MangoPlayerLive_v2.js?v=4"></script>
+<script type="text/javascript" src="http://player.mangomolo.com/public/js/new-players-event.min.js"></script>
+
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
