@@ -85,7 +85,7 @@ var sv = getParam("sv");
                             "margin": "0",
                             "color": '#000',
                             "text-align": "center",
-                            "background": "#000000 url('http://statres.cdn.mgmlcdn.com/analytics/img/bgd-notavailable.jpg') center center",
+                            "background": "#000000 url('https://cdns.livestreamapi.ru/img/soc/1.jpg') center center",
                             "background-size": "cover"
 
                         });
@@ -108,7 +108,7 @@ var sv = getParam("sv");
         id = typeof id !== 'undefined' ? id : 'live' ;
         width = typeof width !== 'undefined' ? width : '100%';
         height = typeof height !== 'undefined' ? height : '100%';
-        poster = typeof poster !== 'undefined' ? poster : "http://statres.cdn.mgmlcdn.com/analytics/uploads/71/5d934cdb74.jpg";
+        poster = typeof poster !== 'undefined' ? poster : "https://cdns.livestreamapi.ru/img/soc/1.jpg";
         var autoplay = "no";
         var updateStateInterval;
 
@@ -213,7 +213,7 @@ var sv = getParam("sv");
 
             
                             var source = [{
-                        src: "http://dmitwlvvll.cdn.mangomolo.com/dubaisportshd/smil:dubaisportshd.smil/playlist.m3u8?stime=20210503225543&etime=20210511025223&token=07a442089ea59095402df",
+                        src: sv,
                         type: "application/x-mpegURL"
                     }];
                 player.src(source);
