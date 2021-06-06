@@ -1,40 +1,26 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
-<title>api bein live </title><style  type="text/css">
-html,body {height:100%; width:100%; padding:0; margin:0; }
-iframe {height:100%;width:100%; padding:0; margin:0;position:fixed;}</style>
-<iframe  id="ap" src=""  allowtransparency="true" frameborder="0" width="100%"  height="100%"></iframe>
-<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script type="text/javascript">
-function getUrlVars(){var vars={};
-var parts=window.location.href.replace(/[?$]+([^=$]+)=([^$]*)/gi,
-function(m,key,value)
-{vars[key]=value});return vars}
-var id=getUrlVars()["id"];
-var url="https://jsonp.afeld.me/?url=https://www.janjua.tv/hembedplayer/" + id + "/1/500/400";
-$.ajax({url: "https://www.tvportremote.com/loadbalancer?103386",
-success:function(data) {ea = data.split('=')[1];}
-});
-$.get(url,
-function(e)
-{p=e.split('var hlsUrl = "https://" + ea + ")[1],
-url=p.split('";')[0],
-src=JSON.parse('{ "l":"'+url+'"}'),
-x=e.split('enableVideo("')[1],
-id=x.split('");')[0],
-pk=JSON.parse('{ "l":"'+id+'"}'),
-document.getElementById("ap");
-var str = (pk.l);
-var result = str.slice(-73,3); 
-var res = str.slice(4);
-ap.src = "http://www.html-editor.tk/hls/api-hls.html?src=" + ('https://'+ea+src.l+result+res);
-});
-</script> </body></html>
-<!--
-http://raw.githack.com/gaberomar/vv9/master/1.html?id=beinsportsfree1a
-http://raw.githack.com/gaberomar/vv9/master/1.html?id=beinsportsfree2b
-http://raw.githack.com/gaberomar/vv9/master/1.html?id=beinsportsfree3
-http://raw.githack.com/gaberomar/vv9/master/1.html?id=beinsportsfree4
-http://raw.githack.com/gaberomar/vv9/master/1.html?id=beinsportsfree5
-http://raw.githack.com/gaberomar/vv9/master/1.html?id=beinsportsfree6
-http://raw.githack.com/gaberomar/vv9/master/1.html?id=beinsportsfree7
--->
+function getParam ( sname )
+{
+  var params = location.search.substr(location.search.indexOf("?")+1);
+  var sval =  params.replace("sv=", "");
+  
+  return sval;
+}
+var sv = getParam("sv");
+
+</script>
+ <div id="player"></div>
+<div id="dvMessage" style="bottom: 0px; color: white; display: none; font-family: &quot;Myriad Pro&quot;, Arial; font-size: 20px; height: 50px; left: 0px; margin: auto; max-width: 500px; position: absolute; right: 0px; text-align: center; top: 0px; width: 100%;">
+<span id="lblMessage">an error has occured or your browser is out of date please update</span>
+</div>
+<script src="https://player.kwikmotion.com/ClientsTemplates/smc/KwikLink_6773569c-93df-4dac-ba30-4b6293ef0768.js" type="text/javascript"></script>
+<script type="text/javascript">
+//<![CDATA[
+      kwikMotion("player",{
+      autostart: "true",
+        width: "100%",
+      aspectratio: "16:9",
+       image: "",
+     source: sv,
+            });      
+</script>
