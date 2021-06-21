@@ -83,7 +83,7 @@ var qqnn = "aHR0cHM6Ly9obHMtNDQuaGVyb2t1YXBwLmNvbS9odHRwczovL3ZpZGVvLXdlYXZlci5m
   height:"100%", 
   stretching:"uniform", 
   hideVolumeBar: true, 
-  mediacontrol: {seekbar: "#e1c101", buttons: "rgbr(225,193,1)"}, 
+  mediacontrol: {seekbar: "#E5C710", buttons: "rgb(229,199,16)"}, 
   watermark: "https://1.bp.blogspot.com/-RcWqkcNhNGE/YMP0d3OEG2I/AAAAAAAAM_s/8enH55tThiQ6Db9EbpyVmyxjaW4Z1BEuACLcBGAsYHQ/s300-rw-e90-w300/tv1.png", position : "bottom-left",       
   plugins: {'core': [LevelSelector]}, events:{onError:function(e){playError()},onReady:function(e){if(this.getVolume()==0){unmuteBtn.style.display="block"}},onVolumeUpdate:function(e){if(this.getVolume()>0){unmuteBtn.style.display="none"}else{unmuteBtn.style.display="block"}}},});
   function playError(){var delay=initialDelay;clearInterval(timer);timer=setInterval(function(){var messageElement=document.getElementById("error-message");delay-=1;if(delay){messageElement.querySelector("span").innerHTML=delay;messageElement.style.display="block"}else{clearInterval(timer);messageElement.style.display="none";
